@@ -6,6 +6,7 @@ Description : Combinator for adding OAuth2 protection to a Servant API.
 -}
 module OAuth2.Protect where
 
+import "hashable" Data.Hashable (Hashable(hashWithSalt))
 import qualified "text" Data.Text as T
 import "this" OAuth2.Types
        (AccessToken(AccessToken), TokenType(Bearer), TokenType)
@@ -24,7 +25,17 @@ type Protect = Header "Authorization" Authorization
 data Authorization = Authorization
   { authorizationAccessToken :: AccessToken
   , authorizationTokenType :: TokenType
-  }
+  } deriving (Eq, Show)
+
+instance Hashable Authorization where
+  hashWithSalt x Authorization { authorizationAccessToken
+                               , authorizationTokenType
+                               } =
+    hashWithSalt
+      x
+      ( "Authorization" :: Text
+      , authorizationAccessToken
+      , authorizationTokenType)
 
 instance ToHttpApiData Authorization where
   toUrlPiece authorization =
