@@ -9,7 +9,6 @@ module OAuth2.Types where
 import "base" Control.Monad (fail)
 import "aeson" Data.Aeson
        (FromJSON(parseJSON), ToJSON(toJSON), withText)
-import "hashable" Data.Hashable (Hashable(hashWithSalt))
 import "cereal" Data.Serialize
 import "text" Data.Text (pack)
 import "network-uri" Network.URI (URI, parseAbsoluteURI)

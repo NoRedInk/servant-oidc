@@ -6,13 +6,13 @@ Description : Combinator for adding OAuth2 protection to a Servant API.
 -}
 module OAuth2.Protect where
 
-import "hashable" Data.Hashable (Hashable(hashWithSalt))
-import qualified "text" Data.Text as T
 import "this" OAuth2.Types
        (AccessToken(AccessToken), TokenType(Bearer), TokenType)
 import "protolude" Protolude
 import "servant" Servant.API
        (FromHttpApiData(parseUrlPiece), Header, ToHttpApiData(toUrlPiece))
+
+import qualified "text" Data.Text as T
 
 -- | A combinator for marking an endpoint as requiring OAuth2 authorization.
 --
