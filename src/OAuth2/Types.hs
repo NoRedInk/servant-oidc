@@ -1,3 +1,4 @@
+{-# LANGUAGE LambdaCase #-}
 {-# LANGUAGE OverloadedLists #-}
 {-# LANGUAGE TypeFamilies #-}
 
@@ -88,10 +89,9 @@ instance Hashable TokenType where
 
 instance FromJSON TokenType where
   parseJSON =
-    withText "TokenType" $ \tokenType ->
-      case tokenType of
-        "bearer" -> pure Bearer
-        _ -> fail "Unsupported token type"
+    withText "TokenType" $ \case
+      "bearer" -> pure Bearer
+      _ -> fail "Unsupported token type"
 
 instance ToJSON TokenType where
   toJSON Bearer = "bearer"
