@@ -27,16 +27,6 @@ data Authorization = Authorization
   , authorizationTokenType :: TokenType
   } deriving (Eq, Show)
 
-instance Hashable Authorization where
-  hashWithSalt x Authorization { authorizationAccessToken
-                               , authorizationTokenType
-                               } =
-    hashWithSalt
-      x
-      ( "Authorization" :: Text
-      , authorizationAccessToken
-      , authorizationTokenType)
-
 instance ToHttpApiData Authorization where
   toUrlPiece authorization =
     case authorization of

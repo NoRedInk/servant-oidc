@@ -55,7 +55,7 @@ instance FromHttpApiData RedirectURI where
 --   <https://tools.ietf.org/html/rfc6749#section-1.4>
 newtype AccessToken =
   AccessToken Text
-  deriving (Eq, Generic, Hashable, Show)
+  deriving (Eq, Generic, Show)
 
 instance Serialize AccessToken where
   put (AccessToken txt) = Data.Serialize.put $ encodeUtf8 txt
@@ -82,9 +82,6 @@ instance ToJSON RefreshToken
 data TokenType =
   Bearer
   deriving (Eq, Show)
-
-instance Hashable TokenType where
-  hashWithSalt x Bearer = hashWithSalt x ("Bearer" :: Text)
 
 instance FromJSON TokenType where
   parseJSON =
