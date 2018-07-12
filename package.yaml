@@ -15,7 +15,6 @@ dependencies:
 - http-api-data == 0.3.7.1
 - http-types == 0.9.1
 - network-uri == 2.6.1.0
-- protolude == 0.2.1
 - servant == 0.11
 - servant-auth-server == 0.3.1.0
 - servant-server == 0.11.0.1
@@ -32,7 +31,6 @@ default-extensions:
 - LambdaCase
 - MultiParamTypeClasses
 - NamedFieldPuns
-- NoImplicitPrelude
 - OverloadedStrings
 - PackageImports
 - ScopedTypeVariables

@@ -9,16 +9,16 @@ module OAuth2.Token where
 import "aeson" Data.Aeson
        (FromJSON(parseJSON), ToJSON(toJSON), (.:), (.:?), (.=), object,
         withObject)
-import qualified "jose-jwt" Jose.Jwt
 import "this" OAuth2.Types
        (AccessToken, AuthorizationCode, ClientId, ClientSecret,
         ExpirationTime, GrantType, RedirectURI, RefreshToken, TokenType)
-import "protolude" Protolude
 import "servant" Servant.API
        ((:>), FormUrlEncoded, JSON, Post, ReqBody,
         ToHttpApiData(toQueryParam))
 import "http-api-data" Web.FormUrlEncoded
        (FromForm(fromForm), ToForm(toForm), parseUnique)
+
+import qualified "jose-jwt" Jose.Jwt
 
 -- | Specification of the /token endpoint
 --

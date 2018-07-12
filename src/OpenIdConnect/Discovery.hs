@@ -12,9 +12,10 @@ import "aeson" Data.Aeson
         genericParseJSON, genericToJSON, withText)
 import "aeson-casing" Data.Aeson.Casing (snakeCase)
 import "aeson" Data.Aeson.Types (fieldLabelModifier)
+import "text" Data.Text (Text)
+import "base" GHC.Generics (Generic)
 import "network-uri" Network.URI (URI)
 import "this" OAuth2.Authorize (ResponseType)
-import "protolude" Protolude
 import "servant" Servant.API ((:>), Get, JSON)
 import "servant-auth-server" Servant.Auth.Server () -- TODO: Get rid of this import (it provides a FromJSON URI orphan instance).
 
@@ -53,7 +54,7 @@ instance FromJSON ResponseMode where
   parseJSON =
     withText "ResponseMode" $ \case
       "query" -> pure Query
-      _ -> fail "Unknown response mode"
+      _ -> Control.Monad.Fail.fail "Unknown response mode"
 
 instance ToJSON ResponseMode where
   toJSON Query = "query"
@@ -66,7 +67,7 @@ instance FromJSON TokenEndpointAuthMethod where
   parseJSON =
     withText "TokenEndpointAuthMethod" $ \case
       "client_secret_basic" -> pure ClientSecretBasic
-      _ -> fail "Unknown token endpoint auth method"
+      _ -> Control.Monad.Fail.fail "Unknown token endpoint auth method"
 
 instance ToJSON TokenEndpointAuthMethod where
   toJSON ClientSecretBasic = "client_secret_basic"
@@ -79,7 +80,7 @@ instance FromJSON SubjectType where
   parseJSON =
     withText "SubjectType" $ \case
       "public" -> pure Public
-      _ -> fail "Unknown subject type"
+      _ -> Control.Monad.Fail.fail "Unknown subject type"
 
 instance ToJSON SubjectType where
   toJSON Public = "public"
@@ -92,7 +93,7 @@ instance FromJSON ClaimType where
   parseJSON =
     withText "ClaimType" $ \case
       "normal" -> pure Normal
-      _ -> fail "Unknown claim type"
+      _ -> Control.Monad.Fail.fail "Unknown claim type"
 
 instance ToJSON ClaimType where
   toJSON Normal = "normal"
@@ -132,7 +133,7 @@ instance FromJSON IdTokenSigningAlgValue where
   parseJSON =
     withText "IdTokenSigningAlgValue" $ \case
       "RS256" -> pure RS256
-      _ -> fail "Unknown signing algorithm"
+      _ -> Control.Monad.Fail.fail "Unknown signing algorithm"
 
 instance ToJSON IdTokenSigningAlgValue where
   toJSON RS256 = "RS256"

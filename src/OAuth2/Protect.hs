@@ -6,9 +6,9 @@ Description : Combinator for adding OAuth2 protection to a Servant API.
 -}
 module OAuth2.Protect where
 
+import "base" Data.Semigroup ((<>))
 import "this" OAuth2.Types
        (AccessToken(AccessToken), TokenType(Bearer), TokenType)
-import "protolude" Protolude
 import "servant" Servant.API
        (FromHttpApiData(parseUrlPiece), Header, ToHttpApiData(toUrlPiece))
 
@@ -40,7 +40,7 @@ instance FromHttpApiData Authorization where
       ["Bearer", token] ->
         Right
           Authorization
-          { authorizationAccessToken = AccessToken $ toS token
+          { authorizationAccessToken = AccessToken token
           , authorizationTokenType = Bearer
           }
       _ -> Left "Invalid authorization string"
