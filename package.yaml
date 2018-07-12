@@ -7,7 +7,6 @@ copyright: 2017 NoRedInk
 license: BSD3
 dependencies:
 - aeson == 1.2.3.0
-- aeson-casing == 0.1.0.5
 - base == 4.10.1.0
 - cereal == 0.5.5.0
 - jose-jwt == 0.7.8

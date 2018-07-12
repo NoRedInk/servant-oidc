@@ -5,10 +5,8 @@ module OpenIdConnect.Discovery where
 
 import "base" Control.Monad.Fail (fail)
 import "aeson" Data.Aeson
-       (FromJSON(parseJSON), ToJSON(toJSON), defaultOptions,
-        genericParseJSON, genericToJSON, withText)
-import "aeson-casing" Data.Aeson.Casing (snakeCase)
-import "aeson" Data.Aeson.Types (fieldLabelModifier)
+       (FromJSON(parseJSON), ToJSON(toJSON), (.:), (.=), object,
+        withObject, withText)
 import "text" Data.Text (Text)
 import "base" GHC.Generics (Generic)
 import "network-uri" Network.URI (URI)
@@ -38,10 +36,59 @@ data Response = Response
   } deriving (Show, Generic)
 
 instance FromJSON Response where
-  parseJSON = genericParseJSON defaultOptions {fieldLabelModifier = snakeCase}
+  parseJSON =
+    withObject "Response" $ \v -> do
+      issuer <- v .: "issuer"
+      authorizationEndpoint <- v .: "authorization_endpoint"
+      tokenEndpoint <- v .: "token_endpoint"
+      userinfoEndpoint <- v .: "userinfo_endpoint"
+      jwksUri <- v .: "jwks_uri"
+      scopesSupported <- v .: "scopes_supported"
+      responseTypesSupported <- v .: "response_types_supported"
+      responseModesSupported <- v .: "response_modes_supported"
+      tokenEndpointAuthMethodsSupported <-
+        v .: "token_endpoint_auth_methods_supported"
+      subjectTypesSupported <- v .: "subject_types_supported"
+      claimTypesSupported <- v .: "claim_types_supported"
+      claimsSupported <- v .: "claims_supported"
+      idTokenSigningAlgValuesSupported <-
+        v .: "id_token_signing_alg_values_supported"
+      pure
+        Response
+        { issuer
+        , authorizationEndpoint
+        , tokenEndpoint
+        , userinfoEndpoint
+        , jwksUri
+        , scopesSupported
+        , responseTypesSupported
+        , responseModesSupported
+        , tokenEndpointAuthMethodsSupported
+        , subjectTypesSupported
+        , claimTypesSupported
+        , claimsSupported
+        , idTokenSigningAlgValuesSupported
+        }
 
 instance ToJSON Response where
-  toJSON = genericToJSON defaultOptions {fieldLabelModifier = snakeCase}
+  toJSON response =
+    object
+      [ "issuer" .= issuer response
+      , "authorization_endpoint" .= authorizationEndpoint response
+      , "token_endpoint" .= tokenEndpoint response
+      , "userinfo_endpoint" .= userinfoEndpoint response
+      , "jwks_uri" .= jwksUri response
+      , "scopes_supported" .= scopesSupported response
+      , "response_types_supported" .= responseTypesSupported response
+      , "response_modes_supported" .= responseModesSupported response
+      , "token_endpoint_auth_methods_supported" .=
+        tokenEndpointAuthMethodsSupported response
+      , "subject_types_supported" .= subjectTypesSupported response
+      , "claim_types_supported" .= claimTypesSupported response
+      , "claims_supported" .= claimsSupported response
+      , "id_token_signing_alg_values_supported" .=
+        idTokenSigningAlgValuesSupported response
+      ]
 
 data ResponseMode =
   Query
