@@ -1,6 +1,3 @@
-{-# LANGUAGE OverloadedLists #-}
-{-# LANGUAGE TypeFamilies #-}
-
 {-|
 Description : keys endpoint of a OpenID Connect provider.
 -}

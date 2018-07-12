@@ -1,6 +1,3 @@
-{-# LANGUAGE OverloadedLists #-}
-{-# LANGUAGE TypeFamilies #-}
-
 {-|
 Description : Discovery endpoint of a OpenIDClient provider.
 -}

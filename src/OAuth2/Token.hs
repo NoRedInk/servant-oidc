@@ -1,6 +1,4 @@
 {-# LANGUAGE OverloadedLists #-}
-{-# LANGUAGE TypeFamilies #-}
-
 {-|
 Description : Token endpoint of an OAuth2 provider.
 -}

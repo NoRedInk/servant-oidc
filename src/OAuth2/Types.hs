@@ -1,6 +1,3 @@
-{-# LANGUAGE OverloadedLists #-}
-{-# LANGUAGE TypeFamilies #-}
-
 {-|
 Description : Types shared by OAuth2 modules.
 -}

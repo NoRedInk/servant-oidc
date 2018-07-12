@@ -1,6 +1,3 @@
-{-# LANGUAGE OverloadedLists #-}
-{-# LANGUAGE TypeFamilies #-}
-
 {-|
 Description : Combinator for adding OAuth2 protection to a Servant API.
 -}
