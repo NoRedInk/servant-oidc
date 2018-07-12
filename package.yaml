@@ -14,7 +14,6 @@ dependencies:
 - network-uri == 2.6.1.0
 - servant == 0.11
 - servant-auth-server == 0.3.1.0
-- servant-server == 0.11.0.1
 - text == 1.2.2.2
 ghc-options:
 - -Wall
