@@ -2,7 +2,5 @@ flags: {}
 extra-package-dbs: []
 packages:
   - .
-extra-deps:
-  - servant-auth-0.3.2.0
-  - servant-auth-server-0.3.1.0
+extra-deps: []
 resolver: lts-10.4

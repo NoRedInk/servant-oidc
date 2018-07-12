@@ -5,14 +5,15 @@ module OpenIdConnect.Discovery where
 
 import "base" Control.Monad.Fail (fail)
 import "aeson" Data.Aeson
-       (FromJSON(parseJSON), ToJSON(toJSON), (.:), (.=), object,
-        withObject, withText)
-import "text" Data.Text (Text)
+       (FromJSON(parseJSON), Object, ToJSON(toJSON), Value, (.:), (.=),
+        object, withObject, withText)
+import "aeson" Data.Aeson.Types (Parser)
+import "base" Data.Semigroup ((<>))
+import "text" Data.Text (Text, unpack)
 import "base" GHC.Generics (Generic)
-import "network-uri" Network.URI (URI)
+import "network-uri" Network.URI (URI, parseURI)
 import "this" OAuth2.Authorize (ResponseType)
 import "servant" Servant.API ((:>), Get, JSON)
-import "servant-auth-server" Servant.Auth.Server () -- TODO: Get rid of this import (it provides a FromJSON URI orphan instance).
 
 type API
    = ".well-known"
@@ -38,11 +39,11 @@ data Response = Response
 instance FromJSON Response where
   parseJSON =
     withObject "Response" $ \v -> do
-      issuer <- v .: "issuer"
-      authorizationEndpoint <- v .: "authorization_endpoint"
-      tokenEndpoint <- v .: "token_endpoint"
-      userinfoEndpoint <- v .: "userinfo_endpoint"
-      jwksUri <- v .: "jwks_uri"
+      issuer <- parseURI' v "issuer"
+      authorizationEndpoint <- parseURI' v "authorization_endpoint"
+      tokenEndpoint <- parseURI' v "token_endpoint"
+      userinfoEndpoint <- parseURI' v "userinfo_endpoint"
+      jwksUri <- parseURI' v "jwks_uri"
       scopesSupported <- v .: "scopes_supported"
       responseTypesSupported <- v .: "response_types_supported"
       responseModesSupported <- v .: "response_modes_supported"
@@ -69,15 +70,24 @@ instance FromJSON Response where
         , claimsSupported
         , idTokenSigningAlgValuesSupported
         }
+    where
+      parseURI' :: Object -> Text -> Parser URI
+      parseURI' obj x = do
+        str <- obj .: x
+        case parseURI str of
+          Just uri -> pure uri
+          Nothing ->
+            Control.Monad.Fail.fail
+              (unpack $ "Could not parse URI for field `" <> x <> "`")
 
 instance ToJSON Response where
   toJSON response =
     object
-      [ "issuer" .= issuer response
-      , "authorization_endpoint" .= authorizationEndpoint response
-      , "token_endpoint" .= tokenEndpoint response
-      , "userinfo_endpoint" .= userinfoEndpoint response
-      , "jwks_uri" .= jwksUri response
+      [ fromURI "issuer" (issuer response)
+      , fromURI "authorization_endpoint" (authorizationEndpoint response)
+      , fromURI "token_endpoint" (tokenEndpoint response)
+      , fromURI "userinfo_endpoint" (userinfoEndpoint response)
+      , fromURI "jwks_uri" (jwksUri response)
       , "scopes_supported" .= scopesSupported response
       , "response_types_supported" .= responseTypesSupported response
       , "response_modes_supported" .= responseModesSupported response
@@ -89,6 +99,9 @@ instance ToJSON Response where
       , "id_token_signing_alg_values_supported" .=
         idTokenSigningAlgValuesSupported response
       ]
+    where
+      fromURI :: Text -> URI -> (Text, Value)
+      fromURI x uri = (x, toJSON $ show uri)
 
 data ResponseMode =
   Query
