@@ -9,13 +9,14 @@ module OAuth2.Types where
 import "base" Control.Monad (fail)
 import "aeson" Data.Aeson
        (FromJSON(parseJSON), ToJSON(toJSON), withText)
-import "cereal" Data.Serialize
+import "cereal" Data.Serialize (Serialize(get, put))
 import "base" Data.String (IsString)
 import "text" Data.Text (Text, pack, unpack)
 import "text" Data.Text.Encoding (decodeUtf8, encodeUtf8)
 import "base" GHC.Generics (Generic)
 import "network-uri" Network.URI (URI, parseAbsoluteURI)
 import "servant-server" Servant
+       (FromHttpApiData(parseUrlPiece), ToHttpApiData(toUrlPiece))
 
 newtype AuthorizationCode =
   AuthorizationCode Text
