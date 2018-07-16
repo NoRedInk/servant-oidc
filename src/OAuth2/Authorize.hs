@@ -1,4 +1,3 @@
-{-# LANGUAGE OverloadedLists #-}
 {-# LANGUAGE TypeFamilies #-}
 
 {-|
@@ -9,15 +8,15 @@ module OAuth2.Authorize where
 import "base" Control.Monad.Fail (fail)
 import "aeson" Data.Aeson
        (FromJSON(parseJSON), ToJSON(toJSON), withText)
-import qualified "text" Data.Text as T
 import "base" GHC.Exts (IsList(Item, fromList, toList))
 import "this" OAuth2.Types
        (CSRFState, ClientId, RedirectURI, Scope)
-import "protolude" Protolude
 import "servant" Servant.API
        ((:>), FromHttpApiData(parseUrlPiece), Header, Headers, JSON,
         NoContent, QueryParam, StdMethod(GET), ToHttpApiData(toUrlPiece),
         Verb)
+
+import qualified "text" Data.Text as T
 
 -- | Specification of the /autorize endpoint
 --
@@ -52,7 +51,7 @@ instance FromJSON ResponseType where
   parseJSON =
     withText "ResponseType" $ \case
       "code" -> pure Code
-      _ -> fail "Unknown response type"
+      _ -> Control.Monad.Fail.fail "Unknown response type"
 
 instance ToJSON ResponseType where
   toJSON Code = "code"
@@ -67,7 +66,7 @@ instance IsList Scopes where
   toList (Scopes scopes) = scopes
 
 instance ToHttpApiData Scopes where
-  toUrlPiece (Scopes scopes) = mconcat . intersperse " " $ toUrlPiece <$> scopes
+  toUrlPiece (Scopes scopes) = T.intercalate " " $ toUrlPiece <$> scopes
 
 instance FromHttpApiData Scopes where
   parseUrlPiece = fmap Scopes . traverse parseUrlPiece . T.words

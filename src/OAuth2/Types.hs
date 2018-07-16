@@ -1,6 +1,3 @@
-{-# LANGUAGE OverloadedLists #-}
-{-# LANGUAGE TypeFamilies #-}
-
 {-|
 Description : Types shared by OAuth2 modules.
 -}
@@ -9,11 +6,14 @@ module OAuth2.Types where
 import "base" Control.Monad (fail)
 import "aeson" Data.Aeson
        (FromJSON(parseJSON), ToJSON(toJSON), withText)
-import "cereal" Data.Serialize
-import "text" Data.Text (pack)
+import "cereal" Data.Serialize (Serialize(get, put))
+import "base" Data.String (IsString)
+import "text" Data.Text (Text, pack, unpack)
+import "text" Data.Text.Encoding (decodeUtf8, encodeUtf8)
+import "base" GHC.Generics (Generic)
 import "network-uri" Network.URI (URI, parseAbsoluteURI)
-import "protolude" Protolude
-import "servant-server" Servant
+import "http-api-data" Web.HttpApiData
+       (FromHttpApiData(parseUrlPiece), ToHttpApiData(toUrlPiece))
 
 newtype AuthorizationCode =
   AuthorizationCode Text
@@ -47,8 +47,8 @@ instance ToHttpApiData RedirectURI where
 
 instance FromHttpApiData RedirectURI where
   parseUrlPiece =
-    maybeToRight "Not a valid absolute URI" .
-    fmap RedirectURI . parseAbsoluteURI . toS
+    maybe (Left "Not a valid absolute URI") Right .
+    fmap RedirectURI . parseAbsoluteURI . unpack
 
 -- | An OAuth2 access token.
 --
