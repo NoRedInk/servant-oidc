@@ -58,8 +58,6 @@ instance FromForm Request where
 --
 --   <https://tools.ietf.org/html/rfc6749#section-4.1.4>
 data Response = Response
-  -- TODO: the access token, its type, and its expiration date should really be together in a single type.
-  -- The optionally returned refresh token is something else.
   { responseAccessToken :: AccessToken
   , responseTokenType :: TokenType
   , responseExpiresIn :: Maybe ExpirationTime
