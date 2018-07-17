@@ -12,10 +12,6 @@ import "servant" Servant.API
 import qualified "text" Data.Text as T
 
 -- | A combinator for marking an endpoint as requiring OAuth2 authorization.
---
---   TODO: Because this combinator uses `Header` directly, clients using it will
---   have to pass a `Maybe Authorization`. We should see if we can make a custom
---   combinator that just takes an `Authorization`.
 type Protect = Header "Authorization" Authorization
 
 -- | The authorization data passed in requests to OAuth2 protected endpoints.
