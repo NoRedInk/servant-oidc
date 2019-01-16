@@ -1,5 +1,5 @@
 name: servant-oidc
-version: "0.1.0.0"
+version: "0.1.0.1"
 category: Web
 author: NoRedInk
 maintainer: eng@noredink.com
@@ -13,7 +13,7 @@ dependencies:
   - http-api-data == 0.3.8.1
   - network-uri == 2.6.1.0
   - servant == 0.14.1
-  - text == 1.2.3.0
+  - text == 1.2.3.1
 ghc-options:
   - -Wall
   - -Werror
