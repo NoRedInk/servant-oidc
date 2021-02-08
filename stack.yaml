@@ -3,4 +3,5 @@ extra-package-dbs: []
 packages:
   - .
 extra-deps: []
-resolver: lts-12.26
+nix:
+  enable: true
