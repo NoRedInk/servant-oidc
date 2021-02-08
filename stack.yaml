@@ -1,7 +1,0 @@
-flags: {}
-extra-package-dbs: []
-packages:
-  - .
-extra-deps: []
-nix:
-  enable: true
