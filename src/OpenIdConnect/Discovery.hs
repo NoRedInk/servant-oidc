@@ -14,7 +14,6 @@ import "aeson" Data.Aeson
     (.=),
   )
 import "aeson" Data.Aeson.Types (Parser)
-import "base" Data.Semigroup ((<>))
 import "text" Data.Text (Text, unpack)
 import "base" GHC.Generics (Generic)
 import "network-uri" Network.URI (URI, parseURI)

@@ -2,7 +2,6 @@
 -- Description : Combinator for adding OAuth2 protection to a Servant API.
 module OAuth2.Protect where
 
-import "base" Data.Semigroup ((<>))
 import qualified "text" Data.Text as T
 import "this" OAuth2.Types
   ( AccessToken (AccessToken),
