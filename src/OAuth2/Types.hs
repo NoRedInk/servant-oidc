@@ -2,7 +2,6 @@
 -- Description : Types shared by OAuth2 modules.
 module OAuth2.Types where
 
-import "base" Control.Monad (fail)
 import "aeson" Data.Aeson
   ( FromJSON (parseJSON),
     ToJSON (toJSON),
@@ -93,7 +92,7 @@ instance FromJSON TokenType where
   parseJSON =
     withText "TokenType" $ \case
       "bearer" -> pure Bearer
-      _ -> fail "Unsupported token type"
+      _ -> error "Unsupported token type"
 
 instance ToJSON TokenType where
   toJSON Bearer = "bearer"

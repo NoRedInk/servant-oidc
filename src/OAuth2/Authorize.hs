@@ -4,7 +4,6 @@
 -- Description : Authorize endpoint of an OAuth2 provider.
 module OAuth2.Authorize where
 
-import "base" Control.Monad.Fail (fail)
 import "aeson" Data.Aeson
   ( FromJSON (parseJSON),
     ToJSON (toJSON),
@@ -64,7 +63,7 @@ instance FromJSON ResponseType where
   parseJSON =
     withText "ResponseType" $ \case
       "code" -> pure Code
-      _ -> Control.Monad.Fail.fail "Unknown response type"
+      _ -> error "Unknown response type"
 
 instance ToJSON ResponseType where
   toJSON Code = "code"

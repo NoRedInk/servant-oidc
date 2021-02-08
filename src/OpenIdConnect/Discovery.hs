@@ -2,7 +2,6 @@
 -- Description : Discovery endpoint of a OpenIDClient provider.
 module OpenIdConnect.Discovery where
 
-import "base" Control.Monad.Fail (fail)
 import "aeson" Data.Aeson
   ( FromJSON (parseJSON),
     Object,
@@ -85,7 +84,7 @@ instance FromJSON Response where
         case parseURI str of
           Just uri -> pure uri
           Nothing ->
-            Control.Monad.Fail.fail
+            error
               (unpack $ "Could not parse URI for field `" <> x <> "`")
 
 instance ToJSON Response where
@@ -119,7 +118,7 @@ instance FromJSON ResponseMode where
   parseJSON =
     withText "ResponseMode" $ \case
       "query" -> pure Query
-      _ -> Control.Monad.Fail.fail "Unknown response mode"
+      _ -> error "Unknown response mode"
 
 instance ToJSON ResponseMode where
   toJSON Query = "query"
@@ -132,7 +131,7 @@ instance FromJSON TokenEndpointAuthMethod where
   parseJSON =
     withText "TokenEndpointAuthMethod" $ \case
       "client_secret_basic" -> pure ClientSecretBasic
-      _ -> Control.Monad.Fail.fail "Unknown token endpoint auth method"
+      _ -> error "Unknown token endpoint auth method"
 
 instance ToJSON TokenEndpointAuthMethod where
   toJSON ClientSecretBasic = "client_secret_basic"
@@ -145,7 +144,7 @@ instance FromJSON SubjectType where
   parseJSON =
     withText "SubjectType" $ \case
       "public" -> pure Public
-      _ -> Control.Monad.Fail.fail "Unknown subject type"
+      _ -> error "Unknown subject type"
 
 instance ToJSON SubjectType where
   toJSON Public = "public"
@@ -158,7 +157,7 @@ instance FromJSON ClaimType where
   parseJSON =
     withText "ClaimType" $ \case
       "normal" -> pure Normal
-      _ -> Control.Monad.Fail.fail "Unknown claim type"
+      _ -> error "Unknown claim type"
 
 instance ToJSON ClaimType where
   toJSON Normal = "normal"
@@ -198,7 +197,7 @@ instance FromJSON IdTokenSigningAlgValue where
   parseJSON =
     withText "IdTokenSigningAlgValue" $ \case
       "RS256" -> pure RS256
-      _ -> Control.Monad.Fail.fail "Unknown signing algorithm"
+      _ -> error "Unknown signing algorithm"
 
 instance ToJSON IdTokenSigningAlgValue where
   toJSON RS256 = "RS256"
