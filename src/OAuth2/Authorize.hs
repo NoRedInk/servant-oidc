@@ -1,33 +1,46 @@
 {-# LANGUAGE TypeFamilies #-}
 
-{-|
-Description : Authorize endpoint of an OAuth2 provider.
--}
+-- |
+-- Description : Authorize endpoint of an OAuth2 provider.
 module OAuth2.Authorize where
 
 import "base" Control.Monad.Fail (fail)
 import "aeson" Data.Aeson
-       (FromJSON(parseJSON), ToJSON(toJSON), withText)
-import "base" GHC.Exts (IsList(Item, fromList, toList))
-import "this" OAuth2.Types
-       (CSRFState, ClientId, RedirectURI, Scope)
-import "servant" Servant.API
-       ((:>), FromHttpApiData(parseUrlPiece), Header, Headers, JSON,
-        NoContent, QueryParam, StdMethod(GET), ToHttpApiData(toUrlPiece),
-        Verb)
-
+  ( FromJSON (parseJSON),
+    ToJSON (toJSON),
+    withText,
+  )
 import qualified "text" Data.Text as T
+import "base" GHC.Exts (IsList (Item, fromList, toList))
+import "this" OAuth2.Types
+  ( CSRFState,
+    ClientId,
+    RedirectURI,
+    Scope,
+  )
+import "servant" Servant.API
+  ( FromHttpApiData (parseUrlPiece),
+    Header,
+    Headers,
+    JSON,
+    NoContent,
+    QueryParam,
+    StdMethod (GET),
+    ToHttpApiData (toUrlPiece),
+    Verb,
+    (:>),
+  )
 
 -- | Specification of the /autorize endpoint
 --
 --   <https://tools.ietf.org/html/rfc6749#section-4.1.1>
-type API
-   = QueryParam "client_id" ClientId
-     :> QueryParam "response_type" ResponseType
-     :> QueryParam "redirect_uri" RedirectURI
-     :> QueryParam "state" CSRFState
-     :> QueryParam "scopes" Scopes
-     :> GetFound '[ JSON] (Headers '[ Header "Location" RedirectURI] NoContent)
+type API =
+  QueryParam "client_id" ClientId
+    :> QueryParam "response_type" ResponseType
+    :> QueryParam "redirect_uri" RedirectURI
+    :> QueryParam "state" CSRFState
+    :> QueryParam "scopes" Scopes
+    :> GetFound '[JSON] (Headers '[Header "Location" RedirectURI] NoContent)
 
 -- | A Servant 'Verb' indicating this endpoint is expected to redirect the user.
 type GetFound = Verb 'GET 302
@@ -35,8 +48,8 @@ type GetFound = Verb 'GET 302
 -- | The desired grant type.
 --
 --   <https://tools.ietf.org/html/rfc6749#section-3.1.1>
-data ResponseType =
-  Code
+data ResponseType
+  = Code
   deriving (Show)
 
 -- | The Client type generated
@@ -56,8 +69,8 @@ instance FromJSON ResponseType where
 instance ToJSON ResponseType where
   toJSON Code = "code"
 
-newtype Scopes =
-  Scopes [Scope]
+newtype Scopes
+  = Scopes [Scope]
   deriving (Show, Eq)
 
 instance IsList Scopes where
