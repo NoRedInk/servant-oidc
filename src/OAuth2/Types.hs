@@ -92,7 +92,7 @@ instance FromJSON TokenType where
   parseJSON =
     withText "TokenType" $ \case
       "bearer" -> pure Bearer
-      _ -> error "Unsupported token type"
+      _ -> fail "Unsupported token type"
 
 instance ToJSON TokenType where
   toJSON Bearer = "bearer"

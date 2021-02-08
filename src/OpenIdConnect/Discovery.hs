@@ -83,7 +83,7 @@ instance FromJSON Response where
         case parseURI str of
           Just uri -> pure uri
           Nothing ->
-            error
+            fail
               (unpack $ "Could not parse URI for field `" <> x <> "`")
 
 instance ToJSON Response where
@@ -117,7 +117,7 @@ instance FromJSON ResponseMode where
   parseJSON =
     withText "ResponseMode" $ \case
       "query" -> pure Query
-      _ -> error "Unknown response mode"
+      _ -> fail "Unknown response mode"
 
 instance ToJSON ResponseMode where
   toJSON Query = "query"
@@ -130,7 +130,7 @@ instance FromJSON TokenEndpointAuthMethod where
   parseJSON =
     withText "TokenEndpointAuthMethod" $ \case
       "client_secret_basic" -> pure ClientSecretBasic
-      _ -> error "Unknown token endpoint auth method"
+      _ -> fail "Unknown token endpoint auth method"
 
 instance ToJSON TokenEndpointAuthMethod where
   toJSON ClientSecretBasic = "client_secret_basic"
@@ -143,7 +143,7 @@ instance FromJSON SubjectType where
   parseJSON =
     withText "SubjectType" $ \case
       "public" -> pure Public
-      _ -> error "Unknown subject type"
+      _ -> fail "Unknown subject type"
 
 instance ToJSON SubjectType where
   toJSON Public = "public"
@@ -156,7 +156,7 @@ instance FromJSON ClaimType where
   parseJSON =
     withText "ClaimType" $ \case
       "normal" -> pure Normal
-      _ -> error "Unknown claim type"
+      _ -> fail "Unknown claim type"
 
 instance ToJSON ClaimType where
   toJSON Normal = "normal"
@@ -196,7 +196,7 @@ instance FromJSON IdTokenSigningAlgValue where
   parseJSON =
     withText "IdTokenSigningAlgValue" $ \case
       "RS256" -> pure RS256
-      _ -> error "Unknown signing algorithm"
+      _ -> fail "Unknown signing algorithm"
 
 instance ToJSON IdTokenSigningAlgValue where
   toJSON RS256 = "RS256"

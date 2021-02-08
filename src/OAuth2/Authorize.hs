@@ -63,7 +63,7 @@ instance FromJSON ResponseType where
   parseJSON =
     withText "ResponseType" $ \case
       "code" -> pure Code
-      _ -> error "Unknown response type"
+      _ -> fail "Unknown response type"
 
 instance ToJSON ResponseType where
   toJSON Code = "code"
