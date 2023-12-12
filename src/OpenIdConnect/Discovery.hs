@@ -13,6 +13,8 @@ import "aeson" Data.Aeson
     (.:),
     (.=),
   )
+
+import qualified AesonHelpers
 import "aeson" Data.Aeson.Types (Parser)
 import "text" Data.Text (Text, unpack)
 import "base" GHC.Generics (Generic)
@@ -79,7 +81,7 @@ instance FromJSON Response where
     where
       parseURI' :: Object -> Text -> Parser URI
       parseURI' obj x = do
-        str <- obj .: x
+        str <- obj .: AesonHelpers.textToKey x
         case parseURI str of
           Just uri -> pure uri
           Nothing ->
@@ -106,8 +108,8 @@ instance ToJSON Response where
           .= idTokenSigningAlgValuesSupported response
       ]
     where
-      fromURI :: Text -> URI -> (Text, Value)
-      fromURI x uri = (x, toJSON $ show uri)
+      fromURI :: Text -> URI -> (AesonHelpers.Key, Value)
+      fromURI x uri = (AesonHelpers.textToKey x, toJSON $ show uri)
 
 data ResponseMode
   = Query
