@@ -1,6 +1,7 @@
 ### Project Specific ###
 
 *.cabal
+.direnv
 
 # Created by https://www.gitignore.io/api/vim,osx,emacs,linux,macos,windows,haskell,sublimetext,visualstudiocode
 
